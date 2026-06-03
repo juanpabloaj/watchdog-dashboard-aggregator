@@ -26,12 +26,12 @@ func TestAggregate(t *testing.T) {
 
 	todos := []*domain.Todo{
 		{
-			Id:        1,
+			ID:        1,
 			Todo:      "Do something important",
 			Completed: false,
 		},
 		{
-			Id:        2,
+			ID:        2,
 			Todo:      "Do something important later",
 			Completed: false,
 		},
