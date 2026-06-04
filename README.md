@@ -64,19 +64,27 @@ Those tests are in the file internal/infrastructure/dummyjson/get_user_test.go.
     * Return the count of pending tasks and the title of the first pending task
 (if any).
 
-    internal/application/dashboard/aggregate_test.go
+```
+internal/application/dashboard/aggregate_test.go
+```
 
 * The external API is "slow" (simulate this or assume it). Your client must have a strict timeout of 2 seconds.
 
-    internal/infrastructure/dummyjson/get_user_test.go
+```
+internal/infrastructure/dummyjson/get_user_test.go
+```
 
 * If fetching Todos fails but User succeeds, return the User data with a "Todos Unavailable" warning (Partial Failure handling).
 
-    internal/application/dashboard/get_dashboard_test.go
+```
+internal/application/dashboard/get_dashboard_test.go
+```
 
 * Expected JSON response.
 
-    internal/interfaces/httphandler/get_dashboard_test.go
+```
+internal/interfaces/httphandler/get_dashboard_test.go
+```
 
 ## Docker and docker-compose
 
