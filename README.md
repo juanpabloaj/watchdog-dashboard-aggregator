@@ -1,6 +1,20 @@
 # Watchdog dashboard
 
-Run test
+Run service
+
+    go run ./cmd/server
+
+Available endpoint
+
+    GET /dashboard/{1} - Get user dashboard
+
+Test manually
+
+    curl 0.0.0.0:8080/dashboard/1
+
+Environment variables example available in .env.example file.
+
+Run tests
 
     go test -v ./...
 
@@ -24,6 +38,10 @@ Those tests are in the file internal/infrastructure/dummyjson/get_user_test.go.
 
 ## Out of scope
 
-* CORS
 * Authentication
+* CORS
 * Metrics and Distributed tracing
+* Graceful shutdown
+* Kubernetes endpoints, health checks (liveness and readiness)
+* Kubernetes files
+* CI/CD files

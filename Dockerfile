@@ -12,7 +12,7 @@ COPY . .
 
 RUN go build \
   -ldflags "-X 'main.gitHash=$(git describe --tags --always --dirty)' -X 'main.buildDate=$(date -Isecond)'" \
-  -o application ./cmd/server/*.go
+  -o application ./cmd/server/
 
 FROM alpine:latest
 
