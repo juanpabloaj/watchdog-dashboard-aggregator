@@ -88,7 +88,6 @@ func TestAggregate(t *testing.T) {
 			},
 			[]*domain.Todo{},
 		},
-		// TODO Todos Unavailable warning
 	}
 
 	for _, tc := range tt {

@@ -2,9 +2,12 @@ package dashboard
 
 import (
 	"context"
+	"sync"
 
 	"github.com/juanpabloaj/watchdogdashboard/internal/domain"
 )
+
+const todosUnavailableWarning = "Todos Unavailable"
 
 type UserRepository interface {
 	GetUser(ctx context.Context, id int) (*domain.User, error)
@@ -19,14 +22,49 @@ type Service struct {
 	todoRepo TodoRepository
 }
 
-func NewDashboard(UserRepository, TodoRepository) *Service {
-	return &Service{}
+func NewService(userRepo UserRepository, todoRepo TodoRepository) *Service {
+	return &Service{
+		userRepo: userRepo,
+		todoRepo: todoRepo,
+	}
 }
 
 func (s *Service) GetDashboard(ctx context.Context, userID int) (*domain.Dashboard, error) {
-	user := &domain.User{}
-	todos := []*domain.Todo{}
-	return aggregate(user, todos), nil
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	var user *domain.User
+	var todos []*domain.Todo
+	var userErr error
+	var todosErr error
+
+	go func() {
+		defer wg.Done()
+		u, err := s.userRepo.GetUser(ctx, userID)
+		user = u
+		userErr = err
+	}()
+
+	go func() {
+		defer wg.Done()
+		t, err := s.todoRepo.GetTodosByUserID(ctx, userID)
+		todos = t
+		todosErr = err
+	}()
+
+	wg.Wait()
+
+	if userErr != nil {
+		return nil, userErr
+	}
+
+	agg := aggregate(user, todos)
+
+	if todosErr != nil {
+		agg.ErrorWarning = stringPtr(todosUnavailableWarning)
+	}
+
+	return agg, nil
 }
 
 func aggregate(user *domain.User, todos []*domain.Todo) *domain.Dashboard {
@@ -56,4 +94,8 @@ func aggregate(user *domain.User, todos []*domain.Todo) *domain.Dashboard {
 		PendingTaskCount: len(pendings),
 		NextUrgentTask:   nextUrgentTask,
 	}
+}
+
+func stringPtr(s string) *string {
+	return &s
 }

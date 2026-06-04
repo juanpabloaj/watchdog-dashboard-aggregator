@@ -3,13 +3,14 @@ package dummyjson
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/juanpabloaj/watchdogdashboard/internal/domain"
 )
 
-var ErrUnexpectedStatusCode = fmt.Errorf("unexpected status code")
+var ErrUnexpectedStatusCode = errors.New("unexpected status code")
 
 type userResponse struct {
 	ID        int    `json:"id"`
