@@ -16,10 +16,14 @@ RUN go build \
 
 FROM alpine:latest
 
+RUN addgroup -S app && adduser -S app -G app
+
 WORKDIR /app
 
 COPY --from=builder /app/application .
 
 EXPOSE 8080
+
+USER app
 
 CMD ["/app/application"]
